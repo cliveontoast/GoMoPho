@@ -17,7 +17,7 @@ Build-and-test.bat
 #### Running
 **Windows** 
 ```
-.\bin\Debug\GoMoPhoConsole.exe
+.\bin\Windows\GoMoPhoConsole.exe
 ```
 Either pass in a directory with your MVIMG files as an argument, or run it with no argument, then type or paste in the location of the directory with your MVIMG files.
 
