@@ -1,7 +1,11 @@
 ﻿using GoMoPho;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace CoreConsole
+namespace FrameworkConsole
 {
     class Program
     {
@@ -68,7 +72,7 @@ namespace CoreConsole
                 }
             }
             Console.WriteLine($"Finished. Processed {count} videos for {imageFiles.Length} images files.");
-            Console.WriteLine($"Press any key to exit");
+            Console.WriteLine("Press any key to exit");
             Console.ReadKey();
         }
 

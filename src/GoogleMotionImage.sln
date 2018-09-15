@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoMoPhoConsole", "GoMoPhoConsole\GoMoPhoConsole.csproj", "{4C38EE8C-5004-41EF-AE30-F051ACBCEB80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoMoPhoCoreConsole", "GoMoPhoConsole\GoMoPhoCoreConsole.csproj", "{4C38EE8C-5004-41EF-AE30-F051ACBCEB80}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoMoPhoFrameworkConsole", "GoMoPhoFrameworkConsole\GoMoPhoFrameworkConsole.csproj", "{D25176E0-2B64-47DD-AD0A-703D7FBBF0BF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoMoPho", "GoMoPho\GoMoPho.csproj", "{D7886BEA-F6D3-4CE8-B6EC-528464F8F367}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{4C38EE8C-5004-41EF-AE30-F051ACBCEB80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C38EE8C-5004-41EF-AE30-F051ACBCEB80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C38EE8C-5004-41EF-AE30-F051ACBCEB80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D25176E0-2B64-47DD-AD0A-703D7FBBF0BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D25176E0-2B64-47DD-AD0A-703D7FBBF0BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D25176E0-2B64-47DD-AD0A-703D7FBBF0BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D25176E0-2B64-47DD-AD0A-703D7FBBF0BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7886BEA-F6D3-4CE8-B6EC-528464F8F367}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7886BEA-F6D3-4CE8-B6EC-528464F8F367}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7886BEA-F6D3-4CE8-B6EC-528464F8F367}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7886BEA-F6D3-4CE8-B6EC-528464F8F367}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
