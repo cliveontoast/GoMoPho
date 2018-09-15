@@ -1,5 +1,3 @@
-# Dillinger
-
 # GoMoPho
 Google motion photos video extractor.
 Please note, that android backups to Google Drive does not upload the video. Read  https://www.bitquabit.com/post/moving-and-backing-up-google-moving-images/ why.
