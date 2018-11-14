@@ -96,15 +96,24 @@ namespace GoMoPhoConsole
             else
             {
                 Console.Write("   Did not find known video, trying generic approach");
+                // http://dev.exiv2.org/projects/exiv2/wiki/The_Metadata_in_JPEG_files says that a JPEG start of image with 0xFFD8 and ends with 0xFFD9.
+                var endOfJpeg = MovingPhotoExtraction.ToBytes("FF D9".Split(' '));
                 var indexOfMp4_Part1 = MovingPhotoExtraction.ToBytes("00 00 00".Split(' '));
                 var indexOfMp4_Part2 = MovingPhotoExtraction.ToBytes("66 74 79 70".Split(' '));
                 var indexOfMp4_Part3 = MovingPhotoExtraction.ToBytes("6D 70 34 32".Split(' '));
 
-                var bm = new BoyerMoore(indexOfMp4_Part2);
+                var bm = new BoyerMoore(endOfJpeg);
+
+                var endOf = bm.Search(fileBytes);
+                bm.SetPattern(indexOfMp4_Part2);
                 var part2s = bm.SearchAll(fileBytes);
                 bm.SetPattern(indexOfMp4_Part3);
                 foreach (var part2 in part2s)
                 {
+                    if (part2 < endOf)
+                    {
+                        Console.Write("Not yet at end of jpeg");
+                    }
                     var part3 = bm.SearchAll(fileBytes).FirstOrDefault(a => a > part2);
                     // part 3 is just a bit further than part2
                     if (part3 > part2 && part2 + 20 > part3)
