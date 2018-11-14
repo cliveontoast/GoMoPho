@@ -5,13 +5,13 @@ History: Android backups to Google Drive did not upload the video. Read  https:/
 
 Google Drive should now support backing up the video portion. https://www.guidingtech.com/share-motion-photos-google/
 
-#### Running the release
-Choose the zip file 
-
-Windows: choose GoMoPho.WindowsFramework
-GNU/Linux and macOS:
-Got .NET Core? https://www.microsoft.com/net/download I recommend choosing GoMoPho.CrossPlatform
-Otherwise choose the natively compiled Ubuntu, GNULinux, or macOS. 
+#### Running the zip release
+Choose the zip file for your computer and unzip it to a new location. *Native* is compiled for the operating system, while *CrossPlatform* runs on all platforms via the dotnet runtime https://www.microsoft.com/net/download
+- Windows (native) - GoMoPho.WindowsFramework
+- GNU/Linux (native) - GoMoPho.GNULinux
+- macOS (native) - GoMoPho.macOS
+- Ubuntu (native) - GoMoPho.Ubuntu
+- any operating system - choose GoMoPho.CrossPlatform if you have/download .NET Core 
 
 The native compiled GNU/Linux versions require unzipping and then applying execute permissions. The CrossPlatform version does not.
 Please try the following method to apply the execute permissions
