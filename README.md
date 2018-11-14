@@ -28,30 +28,36 @@ or
 GoMoPhoConsole.exe "C:\Users\Clive\OneDrive\Documents\Pictures\Camera Roll"
 ```
 **.NET Core runtime on GNU/Linux MacOS or Windows** 
-Use the dotnet runtime https://www.microsoft.com/net/download to execute bin/netcoreapp2.0/publish/GoMoPhoCoreConsole.dll
+Use the dotnet runtime https://www.microsoft.com/net/download to execute ./bin/CrossPlatform/GoMoPhoCoreConsole.dll
 ```
-dotnet bin/netcoreapp2.0/publish/GoMoPhoCoreConsole.dll test-image
+dotnet bin/CrossPlatform/GoMoPhoCoreConsole.dll test-image
 ```
+This has been tested on Windows and macOS.
 
 **.NET core natively compiled Windows** 
 ```
-bin\netcoreapp2.0\win-x64\GoMoPhoCoreConsole.exe test-image\
+bin\WindowsCore\GoMoPhoCoreConsole.exe test-image\
 ```
 
 **.NET core natively compiled GNU/Linux**
 ```
-bin/netcoreapp2.0/linux-x64/publish/GoMoPhoCoreConsole test-image
+bin/GNULinux/GoMoPhoCoreConsole test-image
 ```
+This has not been tried, feedback on this guide would be great
 
 **.NET core natively compiled GNU/Linux Ubuntu-x64**
 ```
-bin/netcoreapp2.0/ubuntu-x64/publish/GoMoPhoCoreConsole test-image
+bin/Ubuntu/GoMoPhoCoreConsole test-image
 ```
+This has not been tried, feedback on this guide would be great
 
 **.NET core natively compiled MacOS**
 ```
-bin/netcoreapp2.0/osx-x64/publish/GoMoPhoCoreConsole test-image
+bin/macOS/GoMoPhoCoreConsole test-image
 ```
+This has been tested, when executed the OS warns that it is not signed.
+There are no plans for this to be signed, so an exception is required.
+
 ## Result
 On completion, new video.mp4 files will be created for any motion photo found.
 This will not create the wiz-bang google AI versions.. https://ai.googleblog.com/2018/03/behind-motion-photos-technology-in.html

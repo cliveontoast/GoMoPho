@@ -1,23 +1,55 @@
 dotnet clean src\GoogleMotionImage.sln
+del /Q /S /F .\bin
 dotnet build src\GoogleMotionImage.sln
-dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj
-dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r win-x64
-dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r linux-x64
-dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r ubuntu-x64
-dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r osx-x64
+dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -o ..\..\bin\CrossPlatform
+dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r win-x64 -o ..\..\bin\WindowsCore
+dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r linux-x64 -o ..\..\bin\GNULinux
+dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r ubuntu-x64 -o ..\..\bin\Ubuntu
+dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r osx-x64 -o ..\..\bin\macOS
 
-dotnet bin\netcoreapp2.0\publish\GoMoPhoCoreConsole.dll test-image\
+dotnet bin\CrossPlatform\GoMoPhoCoreConsole.dll test-image\
 rem windows only
 bin\Windows\GoMoPhoConsole.exe test-image\
 test-image\MVIMG_20180910_124410.mp4
-cd bin
+
 set /P GoVersion=
 set zipper=c:\Program Files\7-Zip\7z.exe
 if NOT EXIST "%zipper%" SET zipper=c:\Program Files (x86)\7-Zip\7z.exe
-"%zipper%" a GoMoPho.runtime.%GoVersion%.zip netcoreapp2.0\publish
-"%zipper%" a GoMoPho.WindowsFramework.%GoVersion%.zip Windows
-"%zipper%" a GoMoPho.WindowsNative.%GoVersion%.zip netcoreapp2.0\win-x64\publish
-"%zipper%" a GoMoPho.macOS.%GoVersion%.zip netcoreapp2.0\osx-x64\publish
-"%zipper%" a GoMoPho.GnuLinux.%GoVersion%.zip netcoreapp2.0\linux-x64\publish
-"%zipper%" a GoMoPho.Ubuntu.%GoVersion%.zip netcoreapp2.0\ubuntu-x64\publish
-cd ..
+
+cd bin\CrossPlatform
+copy ..\..\README.md .
+echo Execute via the following > README.TXT
+echo dotnet GoMoPhoCoreConsole.dll "optional directory" >> README.TXT
+echo visit https://github.com/cliveontoast/GoMoPho >> README.TXT
+"%zipper%" a ..\GoMoPho.CrossPlatform.%GoVersion%.zip .
+cd ..\..\bin\Windows
+copy ..\..\README.md .
+echo Execute via the following > README.TXT
+echo GoMoPhoConsole.exe "optional directory" >> README.TXT
+echo visit https://github.com/cliveontoast/GoMoPho >> README.TXT
+"%zipper%" a ..\GoMoPho.Windows.%GoVersion%.zip .
+cd ..\..\bin\WindowsCore
+copy ..\..\README.md .
+echo Execute via the following > README.TXT
+echo GoMoPhoCoreConsole.exe "optional directory" >> README.TXT
+echo visit https://github.com/cliveontoast/GoMoPho >> README.TXT
+"%zipper%" a ..\GoMoPho.WindowsCore.%GoVersion%.zip .
+cd ..\..\bin\macOS
+copy ..\..\README.md .
+echo Execute via the following > README.TXT
+echo ./GoMoPhoCoreConsole "optional directory" >> README.TXT
+echo visit https://github.com/cliveontoast/GoMoPho >> README.TXT
+"%zipper%" a ..\GoMoPho.macOS.%GoVersion%.zip .
+cd ..\..\bin\GNULinux
+copy ..\..\README.md .
+echo Execute via the following > README.TXT
+echo ./GoMoPhoCoreConsole "optional directory" >> README.TXT
+echo visit https://github.com/cliveontoast/GoMoPho >> README.TXT
+"%zipper%" a ..\GoMoPho.GNULinux.%GoVersion%.zip .
+cd ..\..\bin\Ubuntu
+copy ..\..\README.md .
+echo Execute via the following > README.TXT
+echo ./GoMoPhoCoreConsole "optional directory" >> README.TXT
+echo visit https://github.com/cliveontoast/GoMoPho >> README.TXT
+"%zipper%" a ..\GoMoPho.Ubuntu.%GoVersion%.zip .
+cd ..\..
