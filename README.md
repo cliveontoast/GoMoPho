@@ -1,42 +1,59 @@
 # GoMoPho
 Google motion photos video extractor.
-Please note, that android backups to Google Drive does not upload the video. Read  https://www.bitquabit.com/post/moving-and-backing-up-google-moving-images/ why.
+
+History: Android backups to Google Drive did not upload the video. Read  https://www.bitquabit.com/post/moving-and-backing-up-google-moving-images/ why.
+
+Google Drive should now support backing up the video portion. https://www.guidingtech.com/share-motion-photos-google/
 
 #### Compilation
 ```
 dotnet build src\GoogleMotionImage.sln
 ```
-Windows: Run the Build-and-test.bat file to compile and test the program.
-Other: Copy the content of the batch file and run them in a console.
+Windows: Run  Build-Test-Zip.bat file to compile and test the program.
 
 #### Testing in windows
 ```
-Build-and-test.bat
+Build-Test-Zip.bat
 ```
 
 #### Running
-**Windows** 
+When running any of the options below, you can either pass in a directory with your MVIMG files as an argument, or run it with no argument, then type or paste in the location of the directory with your MVIMG files.
+
+**Windows .NET framework** 
 ```
 .\bin\Windows\GoMoPhoConsole.exe
 ```
-Either pass in a directory with your MVIMG files as an argument, or run it with no argument, then type or paste in the location of the directory with your MVIMG files.
-
+or
 ```
 GoMoPhoConsole.exe "C:\Users\Clive\OneDrive\Documents\Pictures\Camera Roll"
 ```
-**Linux/MacOS**
-Using dotnet runtime https://www.microsoft.com/net/download/linux-package-manager/rhel/runtime-current execute bin\netcoreapp2.0\GoMoPhoCoreConsole.dll
-
+**.NET Core runtime on GNU/Linux MacOS or Windows** 
+Use the dotnet runtime https://www.microsoft.com/net/download to execute bin/netcoreapp2.0/publish/GoMoPhoCoreConsole.dll
 ```
-dotnet bin\netcoreapp2.0\GoMoPhoCoreConsole.dll test-image\
-```
-or
-```
-dotnet bin\netcoreapp2.0\GoMoPhoCoreConsole.dll
+dotnet bin/netcoreapp2.0/publish/GoMoPhoCoreConsole.dll test-image
 ```
 
+**.NET core natively compiled Windows** 
+```
+bin\netcoreapp2.0\win-x64\GoMoPhoCoreConsole.exe test-image\
+```
+
+**.NET core natively compiled GNU/Linux**
+```
+bin/netcoreapp2.0/linux-x64/publish/GoMoPhoCoreConsole test-image
+```
+
+**.NET core natively compiled GNU/Linux Ubuntu-x64**
+```
+bin/netcoreapp2.0/ubuntu-x64/publish/GoMoPhoCoreConsole test-image
+```
+
+**.NET core natively compiled MacOS**
+```
+bin/netcoreapp2.0/osx-x64/publish/GoMoPhoCoreConsole test-image
+```
 ## Result
-After completing the process will create video.mp4 files for any motion photo videos it finds.
+On completion, new video.mp4 files will be created for any motion photo found.
 This will not create the wiz-bang google AI versions.. https://ai.googleblog.com/2018/03/behind-motion-photos-technology-in.html
 Just the originals.
 
