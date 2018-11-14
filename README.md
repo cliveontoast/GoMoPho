@@ -5,6 +5,20 @@ History: Android backups to Google Drive did not upload the video. Read  https:/
 
 Google Drive should now support backing up the video portion. https://www.guidingtech.com/share-motion-photos-google/
 
+#### Running the release
+Choose the zip file 
+
+Windows: choose GoMoPho.WindowsFramework
+GNU/Linux and macOS:
+Got .NET Core? https://www.microsoft.com/net/download I recommend choosing GoMoPho.CrossPlatform
+Otherwise choose the natively compiled Ubuntu, GNULinux, or macOS. 
+
+The native compiled GNU/Linux versions require unzipping and then applying execute permissions. The CrossPlatform version does not.
+Please try the following method to apply the execute permissions
+```
+unzip GoMoPho.GNULinux.x.x.zip && source grant_perms.sh
+```
+
 #### Compilation
 ```
 dotnet build src\GoogleMotionImage.sln
