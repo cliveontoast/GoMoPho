@@ -18,49 +18,45 @@ if NOT EXIST "%zipper%" SET zipper=c:\Program Files (x86)\7-Zip\7z.exe
 
 cd bin\CrossPlatform
 copy ..\..\README.md .
-echo Execute via the following > README.TXT
-echo dotnet GoMoPhoCoreConsole.dll "optional directory" >> README.TXT
-echo visit https://github.com/cliveontoast/GoMoPho >> README.TXT
+echo Execute via the following > readme.txt
+echo dotnet GoMoPhoCoreConsole.dll [directory] >> readme.txt
+echo visit https://github.com/cliveontoast/GoMoPho >> readme.txt
 "%zipper%" a ..\GoMoPho.CrossPlatform.%GoVersion%.zip .
 cd ..\..\bin\Windows
 copy ..\..\README.md .
-echo Execute via the following > README.TXT
-echo GoMoPhoConsole.exe "optional directory" >> README.TXT
-echo visit https://github.com/cliveontoast/GoMoPho >> README.TXT
+echo Execute via the following > readme.txt
+echo GoMoPhoConsole.exe [directory] >> readme.txt
+echo visit https://github.com/cliveontoast/GoMoPho >> readme.txt
 "%zipper%" a ..\GoMoPho.Windows.%GoVersion%.zip .
 
 cd ..\..\bin\WindowsCore
 copy ..\..\README.md .
-echo Execute via the following > README.TXT
-echo GoMoPhoCoreConsole.exe "optional directory" >> README.TXT
-echo visit https://github.com/cliveontoast/GoMoPho >> README.TXT
+echo Execute via the following > readme.txt
+echo GoMoPhoCoreConsole.exe [directory] >> readme.txt
+echo visit https://github.com/cliveontoast/GoMoPho >> readme.txt
 "%zipper%" a ..\GoMoPho.WindowsCore.%GoVersion%.zip .
 cd ..\..\bin\macOS
 copy ..\..\README.md .
-echo Execute via the following > README.TXT
-echo ./GoMoPhoCoreConsole "optional directory" >> README.TXT
-echo visit https://github.com/cliveontoast/GoMoPho >> README.TXT
+echo Execute via the following > readme.txt
+echo ./GoMoPhoCoreConsole [directory] >> readme.txt
+echo visit https://github.com/cliveontoast/GoMoPho >> readme.txt
 "%zipper%" a ..\GoMoPho.macOS.%GoVersion%.zip .
 
 cd ..\..\bin\GNULinux
 copy ..\..\README.md .
-echo Execute permissions must be added, when unzipping, use "unzip GoMoPho.GNULinux.x.x.zip && source grant_perms.sh" or run the grant_perms.sh afterwards > README.TXT
-echo ./grant_perms.sh # once only >> README.TXT
-echo ./GoMoPhoCoreConsole "optional directory" >> README.TXT
-echo visit https://github.com/cliveontoast/GoMoPho >> README.TXT
-echo #!/bin/bash > grant_perms.sh
-echo # file: grant_perms.sh >> grant_perms.sh
-echo chmod a+x GoMoPhoCoreConsole >> grant_perms.sh
+echo Execute permissions must be added, when unzipping, use "unzip -d ./GoMoPho GoMoPho.GNULinux.x.x.zip && cd ./GoMoPho && source grant_perms.sh" or run the grant_perms.sh afterwards > readme.txt
+echo ./grant_perms.sh # once only >> readme.txt
+echo ./GoMoPhoCoreConsole [directory] >> readme.txt
+echo visit https://github.com/cliveontoast/GoMoPho >> readme.txt
+copy ..\..\src\grant_perms.sh .
 "%zipper%" a ..\GoMoPho.GNULinux.%GoVersion%.zip .
 
 cd ..\..\bin\Ubuntu
 copy ..\..\README.md .
-echo Execute permissions must be added, when unzipping, use "unzip GoMoPho.Ubuntu.x.x.zip && source grant_perms.sh" or run the grant_perms.sh afterwards > README.TXT
-echo ./grant_perms.sh # once only >> README.TXT
-echo ./GoMoPhoCoreConsole "optional directory" >> README.TXT
-echo visit https://github.com/cliveontoast/GoMoPho >> README.TXT
-echo #!/bin/bash > grant_perms.sh
-echo # file: grant_perms.sh >> grant_perms.sh
-echo chmod a+x GoMoPhoCoreConsole >> grant_perms.sh
+echo Execute permissions must be added, when unzipping, use "unzip -d ./GoMoPho GoMoPho.GNULinux.x.x.zip && cd ./GoMoPho && source grant_perms.sh" or run the grant_perms.sh afterwards > readme.txt
+echo ./grant_perms.sh # once only >> readme.txt
+echo ./GoMoPhoCoreConsole [directory] >> readme.txt
+echo visit https://github.com/cliveontoast/GoMoPho >> readme.txt
+copy ..\..\src\grant_perms.sh .
 "%zipper%" a ..\GoMoPho.Ubuntu.%GoVersion%.zip .
 cd ..\..

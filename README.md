@@ -13,10 +13,10 @@ Choose the zip file for your computer and unzip it to a new location. *Native* i
 - Ubuntu (native) - GoMoPho.Ubuntu
 - any operating system - choose GoMoPho.CrossPlatform if you have/download .NET Core 
 
-The native compiled GNU/Linux versions require unzipping and then applying execute permissions. The CrossPlatform version does not.
-Please try the following method to apply the execute permissions
+My windows build process does not support unix permissions. The native compiled GNU/Linux versions require unzipping and then applying execute permissions. The CrossPlatform version does not.
+The following bash commandline will unzip and apply the execute permission to the GoMoPhoCoreConsole file
 ```
-unzip GoMoPho.GNULinux.x.x.zip && source grant_perms.sh
+unzip -d ./GoMoPho GoMoPho.GNULinux.x.x.zip && cd ./GoMoPho && source grant_perms.sh
 ```
 
 #### Compilation
