@@ -11,6 +11,7 @@ dotnet bin\CrossPlatform\GoMoPhoCoreConsole.dll test-image\
 rem windows only
 bin\Windows\GoMoPhoConsole.exe test-image\
 test-image\MVIMG_20180910_124410.mp4
+test-image\MVIMG_20180910_124410.gif
 
 set /P GoVersion=
 set zipper=c:\Program Files\7-Zip\7z.exe
