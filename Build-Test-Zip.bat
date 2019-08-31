@@ -7,9 +7,9 @@ dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r linux-x64 -o ..\.
 dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r ubuntu-x64 -o ..\..\bin\Ubuntu
 dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r osx-x64 -o ..\..\bin\macOS
 
-dotnet bin\CrossPlatform\GoMoPhoCoreConsole.dll test-image\
+dotnet bin\CrossPlatform\GoMoPhoCoreConsole.dll d test-image\ g s split
 rem windows only
-bin\Windows\GoMoPhoConsole.exe test-image\
+bin\Windows\GoMoPhoConsole.exe d test-image\ g s split
 test-image\MVIMG_20180910_124410.mp4
 test-image\MVIMG_20180910_124410.gif
 

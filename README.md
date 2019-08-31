@@ -39,67 +39,134 @@ When running any of the options below, you can either pass in a directory with y
 ```
 or
 ```
-GoMoPhoConsole.exe "C:\Users\Clive\OneDrive\Documents\Pictures\Camera Roll"
+GoMoPhoConsole.exe d "C:\Users\Clive\OneDrive\Documents\Pictures\Camera Roll" g s split
+```
+or to get some help on the options available
+```
+GoMoPhoConsole.exe help 
 ```
 **.NET Core runtime on GNU/Linux MacOS or Windows** 
 Use the dotnet runtime https://www.microsoft.com/net/download to execute ./bin/CrossPlatform/GoMoPhoCoreConsole.dll
 ```
-dotnet bin/CrossPlatform/GoMoPhoCoreConsole.dll test-image
+dotnet bin/CrossPlatform/GoMoPhoCoreConsole.dll d test-image
 ```
 This has been tested on Windows and macOS.
 
 **.NET core natively compiled Windows** 
 ```
-bin\WindowsCore\GoMoPhoCoreConsole.exe test-image\
+bin\WindowsCore\GoMoPhoCoreConsole.exe d test-image\
 ```
 
 **.NET core natively compiled GNU/Linux**
 ```
-bin/GNULinux/GoMoPhoCoreConsole test-image
+bin/GNULinux/GoMoPhoCoreConsole d test-image
 ```
 This has not been tried, feedback on this guide would be great
 
 **.NET core natively compiled GNU/Linux Ubuntu-x64**
 ```
-bin/Ubuntu/GoMoPhoCoreConsole test-image
+bin/Ubuntu/GoMoPhoCoreConsole d test-image
 ```
 This has not been tried, feedback on this guide would be great
 
 **.NET core natively compiled MacOS**
 ```
-bin/macOS/GoMoPhoCoreConsole test-image
+bin/macOS/GoMoPhoCoreConsole d test-image
 ```
 This has been tested, when executed the OS warns that it is not signed.
 There are no plans for this to be signed, so an exception is required.
 
-## Result
-On completion, new video.mp4 files will be created for any motion photo found.
+## Extra reading and options
 This will not create the wiz-bang google AI versions.. https://ai.googleblog.com/2018/03/behind-motion-photos-technology-in.html
 Just the originals.
 
+On running the application without any arguments you are greeted with the following kind message
 
 ```
-No directory given to process
+Welcome to google motion photos extractor.
+If you provide a folder that contains google motion photos,
+then I will extract any videos found
+Press H to show the help, otherwise press any other key to provide a folder
+```
 
-First argument is the folder i.e. "c:\somewhere with spaces\"
-Second optional agument is the search pattern, i.e. default of *MVIMG_*.jpg
-Third optional agument is the search pattern for video file, where file ends with i.e. default of .mp4
+If you press any other key besides H, you will be asked to provide a folder/directory to process 
 
+```
+Please type in a directory to process motion photos and press ENTER i.e. C:\\Users\\Clive\\OneDrive\\Documents\\Pictures\\Camera Roll
+> 
+```
 
-You can 1) type (or paste) in a folder now - without quotes and press <ENTER>
-        2) press <ENTER> to exit
+On providing a folder, it will proceed to extract any videos available
 
-
-    Example typed text, afterwards pressing <ENTER>
-    >c:\somewhere with spaces
-
-> C:\temp\New folder (2)
-Found the following number of google motion photos: 5
-Searching C:\temp\New folder (2)\MVIMG_20180906_092408.jpg   Found the video
-Searching C:\temp\New folder (2)\MVIMG_20180906_102344.jpg   Found the video
-Searching C:\temp\New folder (2)\MVIMG_20180906_102350.jpg   Found the video
-Searching C:\temp\New folder (2)\MVIMG_20180906_102352.jpg   Found the video
-Searching C:\temp\New folder (2)\MVIMG_20180906_104633.jpg   Found the video
-Finished. Processed 5 videos for 5 images files.
+```
+> C:\temp\New folder
+Found the following number of google motion photos: 4
+Searching C:\temp\New folder\MVIMG_20180910_124410.jpg   Found the video
+Searching C:\temp\New folder\MVIMG_20181011_143701.jpg   Found the video
+Searching C:\temp\New folder\MVIMG_20181021_082233.jpg   Found the video
+Searching C:\temp\New folder\MVIMG_20181021_143747.jpg   Found the video
+Finished. Processed 4 files, found 4 videos for 4 images files.
 Press any key to exit
+```
+
+
+If you press H you will see the instructions on how to provide arguments 
+
+```
+Next time you run the application, you can follow the instructions below
+
+Please provide command line arguments as follows:
+
+    d <Directory>
+        A directory to search for google motion photos
+
+    p <search pattern>
+        A search pattern other than *MVIMG_*.jpg in which to find google motion photos
+
+    g
+        Extract a encoded gif file along with the mp4 video file
+
+    s <output directory>
+        A separate directory that will create two files per motion photo
+            1) jpg file without the embedded motion photo
+            2) mp4 file of the motion photo
+
+For example if you type the following arguments when running me:
+    d "C:\Users\Clive\OneDrive\Documents\Pictures\Camera Roll"
+
+Then I will go through all the motion photos like *MVIMG_*.jpg and create a new .mp4 file for each one found.
+
+
+Please type in a directory to process motion photos and press ENTER i.e. C:\\Users\\Clive\\OneDrive\\Documents\\Pictures\\Camera Roll
+>
+```
+
+Providing a full set of arguments to GoMoPho will extract the videos, create a gif, and a new jpeg file without the video embedded in it anymore
+
+```
+.\GoMoPhoConsole.exe d "c:\temp\New Folder" g s "c:\temp\Processed" p *.jpg
+Welcome to google motion photos extractor.
+If you provide a folder that contains google motion photos,
+then I will extract any videos found
+Split directory not found. Shall it be created (y/n)?
+y
+Found the following number of google motion photos: 4
+Searching c:\temp\New Folder\MVIMG_20180910_124410.jpg   Found the video
+Searching c:\temp\New Folder\MVIMG_20181011_143701.jpg   Found the video
+Searching c:\temp\New Folder\MVIMG_20181021_082233.jpg   Found the video
+Searching c:\temp\New Folder\MVIMG_20181021_143747.jpg   Found the video
+Finished. Processed 4 files, found 4 videos for 4 images files.
+Find 4 files to convert to gif
+Writing to c:\temp\Processed\MVIMG_20180910_124410.gif
+Getting FFMpeg, storing C:\Users\Clive\AppData\Local\FFmpeg
+Writing to c:\temp\Processed\MVIMG_20181011_143701.gif
+Finished converion file [MVIMG_20181011_143701.mp4] to .gif
+Writing to c:\temp\Processed\MVIMG_20181021_082233.gif
+Finished converion file [MVIMG_20181021_082233.mp4] to .gif
+Writing to c:\temp\Processed\MVIMG_20181021_143747.gif
+Finished converion file [MVIMG_20181021_143747.mp4] to .gif
+Writing to c:\temp\Processed\MVIMG_20180910_124410.gif
+Finished converion file [MVIMG_20180910_124410.mp4] to .gif
+Press any key to exit
+
 ```

@@ -31,6 +31,7 @@ namespace GoMoPho
             {
                 Console.WriteLine(@"Split directory not found. Shall it be created (y/n)? ");
                 var key = Console.ReadKey();
+                Console.WriteLine();
                 IsValid = IsValid && key.Key == ConsoleKey.Y;
                 if (IsValid)
                 {
