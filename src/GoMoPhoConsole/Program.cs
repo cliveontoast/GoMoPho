@@ -1,13 +1,10 @@
 ﻿using GoMoPho;
+using GoMoPhoCoreConsole;
 using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using Xabe.FFmpeg;
 
 namespace GoMoPhoConsole
 {
@@ -82,7 +79,7 @@ namespace GoMoPhoConsole
                 }
             }
             Console.WriteLine($"Finished. Processed {count} files, found {successCount} videos for {imageFiles.Length} images files.");
-            Run().GetAwaiter().GetResult();
+            FFmpegGif.CreateGifs(filesToConvert);
             Console.WriteLine("Press any key to exit");
             Console.ReadKey();
         }
@@ -158,65 +155,6 @@ namespace GoMoPhoConsole
                 mp4Stream.Write(fileBytes, indexOfMp4, fileBytes.Length - indexOfMp4);
             }
             filesToConvert.Enqueue(new FileInfo(mp4File));
-        }
-
-
-
-        private static async Task Run()
-        {
-            await Console.Out.WriteLineAsync($"Find {filesToConvert.Count} files to convert.");
-            //Run conversion
-            await RunConversion(filesToConvert);
-        }
-
-        private static IEnumerable<FileInfo> GetFilesToConvert(string directoryPath)
-        {
-            //Return all files excluding mp4 because I want convert it to mp4
-            return new DirectoryInfo(directoryPath).GetFiles().Where(x => x.Extension != ".mp4").ToList();
-        }
-
-        private static async Task RunConversion(ConcurrentQueue<FileInfo> filesToConvert)
-        {
-            string outputFileName = null;
-            while (filesToConvert.TryDequeue(out FileInfo fileToConvert))
-            {
-                try
-                {
-                    outputFileName = await OutputGif(fileToConvert);
-                }
-                catch (Exception e)
-                {
-                    if (FFmpeg.ExecutablesPath == null)
-                    {
-                        FFmpeg.ExecutablesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FFmpeg");
-                        //Get latest version of FFmpeg. It's great idea if you don't know if you had installed FFmpeg.
-                        await Console.Out.WriteLineAsync($"Getting FFMpeg, storing {FFmpeg.ExecutablesPath}");
-                        await FFmpeg.GetLatestVersion();
-                        filesToConvert.Enqueue(fileToConvert);
-                    }
-                    else
-                    {
-                        await Console.Out.WriteLineAsync($"Failed file {fileToConvert.Name} to {outputFileName}");
-                        while (e != null)
-                        {
-                            await Console.Out.WriteLineAsync(e.Message);
-                            await Console.Out.WriteLineAsync(e.StackTrace);
-                            e = e.InnerException;
-                        }
-                    }
-                }
-            }
-        }
-
-        private static async Task<string> OutputGif(FileInfo fileToConvert)
-        {
-            //Save file to the same location with changed extension
-            string outputFileName = Path.ChangeExtension(fileToConvert.FullName, ".gif");
-            File.Delete(outputFileName);
-            await Console.Out.WriteLineAsync($"Writing to {outputFileName}");
-            await Conversion.ToGif(fileToConvert.FullName, outputFileName, 0).Start();
-            await Console.Out.WriteLineAsync($"Finished converion file [{fileToConvert.Name}] to .gif");
-            return outputFileName;
         }
     }
 }

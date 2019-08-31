@@ -1,19 +1,27 @@
 ﻿using GoMoPho;
+using GoMoPhoCoreConsole;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace GoMoPhoConsole
 {
     class Program
     {
+        static ConcurrentQueue<FileInfo> filesToConvert;
+
         static void Main(string[] args)
         {
+            
+            filesToConvert = new ConcurrentQueue<FileInfo>();
+
             string searchPattern = System.Configuration.ConfigurationManager.AppSettings["FilePattern"];
             string video = ".mp4";
             var hexSearches = System.Configuration.ConfigurationManager.AppSettings.AllKeys.Where(a => a.StartsWith("Mp4Header")).ToList();
             var byteSearches = hexSearches.Select(a => MovingPhotoExtraction.ToBytes(System.Configuration.ConfigurationManager.AppSettings[a].Split(' '))).ToList();
-            string folder = null;
+            string possibleFolder = null;
             if (args.Length == 0)
             {
                 Console.WriteLine("No directory given to process" + Environment.NewLine);
@@ -28,21 +36,11 @@ namespace GoMoPhoConsole
                 Console.WriteLine("    >c:\\somewhere with spaces");
                 Console.WriteLine();
                 Console.Write("> ");
-                var possibleFolder = Console.ReadLine();
-                if (System.IO.Directory.Exists(possibleFolder))
-                {
-                    folder = possibleFolder;
-                }
-                else
-                {
-                    Console.WriteLine($"Directory {possibleFolder} does not exist. Press any key to exit.");
-                    Console.ReadKey();
-                    return;
-                }
+                possibleFolder = Console.ReadLine();
             }
             else
             {
-                folder = args[0];
+                possibleFolder = args[0];
                 if (args.Length > 1)
                 {
                     searchPattern = args[1];
@@ -52,6 +50,13 @@ namespace GoMoPhoConsole
                     video = args[2];
                 }
             }
+            if (!System.IO.Directory.Exists(possibleFolder))
+            {
+                Console.WriteLine($"Directory {possibleFolder} does not exist. Press any key to exit.");
+                Console.ReadKey();
+                return;
+            }
+            var folder = possibleFolder;
             var imageFiles = System.IO.Directory.GetFiles(folder, searchPattern);
             Console.WriteLine("Found the following number of google motion photos: " + imageFiles.Length);
             int count = 0;
@@ -74,6 +79,7 @@ namespace GoMoPhoConsole
                 }
             }
             Console.WriteLine($"Finished. Processed {count} files, found {successCount} videos for {imageFiles.Length} images files.");
+            FFmpegGif.CreateGifs(filesToConvert);
             Console.WriteLine("Press any key to exit");
             Console.ReadKey();
         }
@@ -148,6 +154,7 @@ namespace GoMoPhoConsole
                 mp4Stream.Seek(0, System.IO.SeekOrigin.Begin);
                 mp4Stream.Write(fileBytes, indexOfMp4, fileBytes.Length - indexOfMp4);
             }
+            filesToConvert.Enqueue(new FileInfo(mp4File));
         }
     }
 }
