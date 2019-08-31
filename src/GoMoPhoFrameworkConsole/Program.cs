@@ -14,58 +14,29 @@ namespace GoMoPhoConsole
 
         static void Main(string[] args)
         {
-            
             filesToConvert = new ConcurrentQueue<FileInfo>();
 
             string searchPattern = System.Configuration.ConfigurationManager.AppSettings["FilePattern"];
-            string video = ".mp4";
             var hexSearches = System.Configuration.ConfigurationManager.AppSettings.AllKeys.Where(a => a.StartsWith("Mp4Header")).ToList();
             var byteSearches = hexSearches.Select(a => MovingPhotoExtraction.ToBytes(System.Configuration.ConfigurationManager.AppSettings[a].Split(' '))).ToList();
-            string possibleFolder = null;
-            if (args.Length == 0)
+
+            var options = new Arguments(args);
+            if (!options.IsValid)
             {
-                Console.WriteLine("No directory given to process" + Environment.NewLine);
-                Console.WriteLine("First argument is the folder i.e. \"c:\\somewhere with spaces\\\"");
-                Console.WriteLine("Second optional agument is the search pattern, i.e. default of " + searchPattern);
-                Console.WriteLine("Third optional agument is the search pattern for video file, where file ends with i.e. default of " + video);
-                Console.WriteLine(System.Environment.NewLine);
-                Console.WriteLine("You can 1) type (or paste) in a folder now - without quotes and press <ENTER>");
-                Console.WriteLine("        2) press <ENTER> to exit");
-                Console.WriteLine(System.Environment.NewLine);
-                Console.WriteLine("    Example typed text, afterwards pressing <ENTER>");
-                Console.WriteLine("    >c:\\somewhere with spaces");
-                Console.WriteLine();
-                Console.Write("> ");
-                possibleFolder = Console.ReadLine();
-            }
-            else
-            {
-                possibleFolder = args[0];
-                if (args.Length > 1)
-                {
-                    searchPattern = args[1];
-                }
-                if (args.Length > 2)
-                {
-                    video = args[2];
-                }
-            }
-            if (!System.IO.Directory.Exists(possibleFolder))
-            {
-                Console.WriteLine($"Directory {possibleFolder} does not exist. Press any key to exit.");
-                Console.ReadKey();
+                Console.WriteLine("Cannot continue with current options. Exiting");
                 return;
             }
-            var folder = possibleFolder;
-            var imageFiles = System.IO.Directory.GetFiles(folder, searchPattern);
+            var folder = options.Directory;
+            var imageFiles = Directory.GetFiles(folder, searchPattern);
             Console.WriteLine("Found the following number of google motion photos: " + imageFiles.Length);
+
             int count = 0;
             int successCount = 0;
             foreach (var item in imageFiles)
             {
                 try
                 {
-                    if (Read(item, byteSearches))
+                    if (Read(item, byteSearches, options.OutputDirectory, options.ExtractJpg))
                     {
                         successCount++;
                     }
@@ -79,17 +50,20 @@ namespace GoMoPhoConsole
                 }
             }
             Console.WriteLine($"Finished. Processed {count} files, found {successCount} videos for {imageFiles.Length} images files.");
-            FFmpegGif.CreateGifs(filesToConvert);
+            if (options.GifExport)
+            {
+                FFmpegGif.CreateGifs(filesToConvert);
+            }
             Console.WriteLine("Press any key to exit");
             Console.ReadKey();
         }
 
-        public static bool Read(string file, List<byte[]> byteSearch)
+        public static bool Read(string file, List<byte[]> byteSearch, string outputDirectory, bool extractJpg)
         {
             //var r1 = new ExifLib.ExifReader(file);
             //var m1 = MetadataExtractor.ImageMetadataReader.ReadMetadata(file);
             Console.Write("Searching " + file);
-            var fileBytes = System.IO.File.ReadAllBytes(file);
+            var fileBytes = File.ReadAllBytes(file);
             int indexOfMp4 = -1;
             foreach (var search in byteSearch)
             {
@@ -99,27 +73,26 @@ namespace GoMoPhoConsole
             if (indexOfMp4 >= 0)
             {
                 Console.WriteLine("   Found the video");
-                WriteVideo(file, fileBytes, indexOfMp4);
+                WriteVideo(file, fileBytes, indexOfMp4, extractJpg, null, outputDirectory);
                 return true;
             }
             else
             {
                 Console.Write("   Did not find known video, trying generic approach");
                 // http://dev.exiv2.org/projects/exiv2/wiki/The_Metadata_in_JPEG_files says that a JPEG start of image with 0xFFD8 and ends with 0xFFD9.
-                var endOfJpeg = MovingPhotoExtraction.ToBytes("FF D9".Split(' '));
                 var indexOfMp4_Part1 = MovingPhotoExtraction.ToBytes("00 00 00".Split(' '));
                 var indexOfMp4_Part2 = MovingPhotoExtraction.ToBytes("66 74 79 70".Split(' '));
                 var indexOfMp4_Part3 = MovingPhotoExtraction.ToBytes("6D 70 34 32".Split(' '));
 
-                var bm = new BoyerMoore(endOfJpeg);
+                BoyerMoore bm;
+                int endOfJpeg = GetEndOfJpeg(fileBytes, out bm);
 
-                var endOf = bm.Search(fileBytes);
                 bm.SetPattern(indexOfMp4_Part2);
                 var part2s = bm.SearchAll(fileBytes);
                 bm.SetPattern(indexOfMp4_Part3);
                 foreach (var part2 in part2s)
                 {
-                    if (part2 < endOf)
+                    if (part2 < endOfJpeg)
                     {
                         Console.Write("Not yet at end of jpeg");
                     }
@@ -134,7 +107,7 @@ namespace GoMoPhoConsole
                         if (minus4 == 0 && minus3 == 0 && minus2 == 0)
                         {
                             Console.WriteLine("... Found video via pattern search");
-                            WriteVideo(file, fileBytes, part2 - 4);
+                            WriteVideo(file, fileBytes, part2 - 4, extractJpg, endOfJpeg, outputDirectory);
                             return true;
                         }
                         Console.WriteLine($"... Found part2 and 3, not 1: {minus4} {minus3} {minus2} {minus1}");
@@ -146,15 +119,35 @@ namespace GoMoPhoConsole
             return false;
         }
 
-        private static void WriteVideo(string file, byte[] fileBytes, int indexOfMp4)
+        private static int GetEndOfJpeg(byte[] fileBytes, out BoyerMoore bm)
         {
-            var mp4File = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(file), System.IO.Path.GetFileNameWithoutExtension(file) + ".mp4");
-            using (var mp4Stream = new System.IO.FileStream(mp4File, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.None))
+            var endOfJpegBytes = MovingPhotoExtraction.ToBytes("FF D9".Split(' '));
+            bm = new BoyerMoore(endOfJpegBytes);
+            int endOfJpeg = bm.Search(fileBytes);
+            return endOfJpeg;
+        }
+
+        private static void WriteVideo(string file, byte[] fileBytes, int indexOfMp4, bool extractJpeg, int? indexOfJpegEnd = null, string outputDirectory = null)
+        {
+            outputDirectory = outputDirectory ?? Path.GetDirectoryName(file);
+            var mp4File = Path.Combine(outputDirectory, Path.GetFileNameWithoutExtension(file) + ".mp4");
+            using (var mp4Stream = new FileStream(mp4File, FileMode.Create, FileAccess.Write, FileShare.None))
             {
-                mp4Stream.Seek(0, System.IO.SeekOrigin.Begin);
+                mp4Stream.Seek(0, SeekOrigin.Begin);
                 mp4Stream.Write(fileBytes, indexOfMp4, fileBytes.Length - indexOfMp4);
             }
             filesToConvert.Enqueue(new FileInfo(mp4File));
+
+            if (extractJpeg)
+            {
+                int jpegEndIdx = indexOfJpegEnd ?? GetEndOfJpeg(fileBytes, out BoyerMoore bm);
+                var jpgFile = Path.Combine(outputDirectory, Path.GetFileName(file));
+                using (var jpgStream = new FileStream(jpgFile, FileMode.Create, FileAccess.Write, FileShare.None))
+                {
+                    jpgStream.Seek(0, SeekOrigin.Begin);
+                    jpgStream.Write(fileBytes, 0, jpegEndIdx+2);
+                }
+            }
         }
     }
 }

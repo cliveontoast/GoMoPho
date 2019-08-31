@@ -13,19 +13,12 @@ namespace GoMoPhoCoreConsole
     {
         public static void CreateGifs(ConcurrentQueue<FileInfo> filesToConvert)
         {
-            Console.WriteLine("Would you like to create GIF movies? (y/n): ");
-            var request = Console.ReadKey();
-            if (request.Key == ConsoleKey.Y)
-            {
-                Console.WriteLine();
-                Console.WriteLine("Converting to gifs");
-                Run(filesToConvert).Wait();
-            }
+            Run(filesToConvert).Wait();
         }
 
         public static async Task Run(ConcurrentQueue<FileInfo> filesToConvert)
         {
-            await Console.Out.WriteLineAsync($"Find {filesToConvert.Count} files to convert.");
+            await Console.Out.WriteLineAsync($"Find {filesToConvert.Count} files to convert to gif");
             //Run conversion
             await RunConversion(filesToConvert);
         }
