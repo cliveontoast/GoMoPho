@@ -12,15 +12,32 @@ namespace GoMoPhoConsole
     {
         static ConcurrentQueue<FileInfo> filesToConvert;
 
+        [STAThread]
         static void Main(string[] args)
         {
+            try
+            {
+                Run(args);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                Console.WriteLine();
+                Console.WriteLine(e.Message);
+
+                Console.WriteLine("Report to https://github.com/cliveontoast/GoMoPho/issues");
+            }
+        }
+
+        static void Run(string[] args)
+        { 
             filesToConvert = new ConcurrentQueue<FileInfo>();
 
             string searchPattern = System.Configuration.ConfigurationManager.AppSettings["FilePattern"];
             var hexSearches = System.Configuration.ConfigurationManager.AppSettings.AllKeys.Where(a => a.StartsWith("Mp4Header")).ToList();
             var byteSearches = hexSearches.Select(a => MovingPhotoExtraction.ToBytes(System.Configuration.ConfigurationManager.AppSettings[a].Split(' '))).ToList();
 
-            var options = new Arguments(args);
+            var options = new Arguments(args, DirectoryPicker);
             if (!options.IsValid)
             {
                 Console.WriteLine("Cannot continue with current options. Exiting");
@@ -165,6 +182,21 @@ namespace GoMoPhoConsole
                 {
                     Console.WriteLine($"Could not find end of jpeg file {file}");
                 }
+            }
+        }
+
+        private static (string directory, bool success) DirectoryPicker()
+        {
+            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            dialog.Description = "Choose a folder with motion photos";
+            var result = dialog.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                return (dialog.SelectedPath, true);
+            }
+            else
+            {
+                return (null, false);
             }
         }
     }

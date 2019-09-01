@@ -14,13 +14,29 @@ namespace GoMoPhoConsole
 
         static void Main(string[] args)
         {
+            try
+            {
+                Run(args);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                Console.WriteLine();
+                Console.WriteLine(e.Message);
+
+                Console.WriteLine("Report to https://github.com/cliveontoast/GoMoPho/issues");
+            }
+        }
+
+        static void Run(string[] args)
+        { 
             filesToConvert = new ConcurrentQueue<FileInfo>();
 
             string searchPattern = System.Configuration.ConfigurationManager.AppSettings["FilePattern"];
             var hexSearches = System.Configuration.ConfigurationManager.AppSettings.AllKeys.Where(a => a.StartsWith("Mp4Header")).ToList();
             var byteSearches = hexSearches.Select(a => MovingPhotoExtraction.ToBytes(System.Configuration.ConfigurationManager.AppSettings[a].Split(' '))).ToList();
 
-            var options = new Arguments(args);
+            var options = new Arguments(args, DirectoryPicker);
             if (!options.IsValid)
             {
                 Console.WriteLine("Cannot continue with current options. Exiting");
@@ -166,6 +182,13 @@ namespace GoMoPhoConsole
                     Console.WriteLine($"Could not find end of jpeg file {file}");
                 }
             }
+        }
+
+        private static (string directory, bool success) DirectoryPicker()
+        {
+            Console.Write(@"Please type in a directory to process motion photos and press ENTER i.e. C:\\Users\\Clive\\OneDrive\\Documents\\Pictures\\Camera Roll
+> ");
+            return (Console.ReadLine(), true);
         }
     }
 }

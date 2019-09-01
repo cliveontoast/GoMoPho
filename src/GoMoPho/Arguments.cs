@@ -18,14 +18,17 @@ namespace GoMoPho
 
         public string OutputDirectory => string.IsNullOrWhiteSpace(SplitDirectory) ? null : SplitDirectory;
         
-        public Arguments(string[] args)
+        public Arguments(string[] args, Func<(string directory, bool success)> directoryPicker)
         {
             ProcessArgs(args);
             while (!System.IO.Directory.Exists(Directory))
             {
-                Console.Write(@"Please type in a directory to process motion photos and press ENTER i.e. C:\\Users\\Clive\\OneDrive\\Documents\\Pictures\\Camera Roll
-> ");
-                Directory = Console.ReadLine();
+                var result = directoryPicker();
+                IsValid = result.success;
+                if (IsValid)
+                    Directory = result.directory;
+                else
+                    return;
             }
             while (!string.IsNullOrWhiteSpace(SplitDirectory) && !System.IO.Directory.Exists(SplitDirectory))
             {
