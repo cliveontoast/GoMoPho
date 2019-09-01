@@ -78,7 +78,7 @@ then I will extract any videos found
 Press A to show more advanced options, otherwise press any other key to provide a folder
 ```
 
-If you press any other key besides A, you will be asked to provide a folder/directory to process 
+If you press any other key besides A, running the windows version you select a folder in a GUI. Otherwise you will be asked to provide a folder/directory to process 
 
 ```
 Please type in a directory to process motion photos and press ENTER i.e. C:\\Users\\Clive\\OneDrive\\Documents\\Pictures\\Camera Roll
