@@ -170,3 +170,18 @@ Windows: Run  Build-Test-Zip.bat file to compile and test the program.
 ```
 Build-Test-Zip.bat
 ```
+### Shoutouts
+Thanks for linking to my project 
+
+https://stackoverflow.com/questions/53104989/how-to-extract-the-photo-video-component-of-a-mvimg/53105237#53105237
+
+https://ghisler.ch/board/viewtopic.php?f=2&t=50977&p=348575&hilit=gomopho#p348575
+
+https://support.google.com/photos/thread/160779?pli=1&authuser=1 (alright this one was me)
+
+https://android.jlelse.eu/working-with-motion-photos-da0aa49b50c for doing a much better job
+
+### The future
+Bringing in a exif tool for C# and using teh micro_video_offset tag like this simple ruby script, and simplifying all my c#  to fewer lines https://gist.github.com/asm/3b43e6de9c4ce99aea9f3e18b0efed57 
+
+Maybe with this https://stackoverflow.com/questions/58649/how-to-get-the-exif-data-from-a-file-using-c-sharp
