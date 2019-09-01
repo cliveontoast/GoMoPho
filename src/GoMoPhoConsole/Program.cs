@@ -26,6 +26,7 @@ namespace GoMoPhoConsole
                 Console.WriteLine("Cannot continue with current options. Exiting");
                 return;
             }
+            searchPattern = options.SearchPattern ?? searchPattern;
             var folder = options.Directory;
             var imageFiles = Directory.GetFiles(folder, searchPattern);
             Console.WriteLine("Found the following number of google motion photos: " + imageFiles.Length);
@@ -85,7 +86,7 @@ namespace GoMoPhoConsole
                 var indexOfMp4_Part3 = MovingPhotoExtraction.ToBytes("6D 70 34 32".Split(' '));
 
                 BoyerMoore bm;
-                int endOfJpeg = GetEndOfJpeg(fileBytes, out bm);
+                int endOfJpeg = GetFirstEndOfJpeg(fileBytes, out bm);
 
                 bm.SetPattern(indexOfMp4_Part2);
                 var part2s = bm.SearchAll(fileBytes);
@@ -107,6 +108,7 @@ namespace GoMoPhoConsole
                         if (minus4 == 0 && minus3 == 0 && minus2 == 0)
                         {
                             Console.WriteLine("... Found video via pattern search");
+                            endOfJpeg = GetEndOfJpeg(fileBytes, indexOfMp4, out _);
                             WriteVideo(file, fileBytes, part2 - 4, extractJpg, endOfJpeg, outputDirectory);
                             return true;
                         }
@@ -119,12 +121,21 @@ namespace GoMoPhoConsole
             return false;
         }
 
-        private static int GetEndOfJpeg(byte[] fileBytes, out BoyerMoore bm)
+        private static int GetFirstEndOfJpeg(byte[] fileBytes, out BoyerMoore bm)
         {
             var endOfJpegBytes = MovingPhotoExtraction.ToBytes("FF D9".Split(' '));
             bm = new BoyerMoore(endOfJpegBytes);
             int endOfJpeg = bm.Search(fileBytes);
             return endOfJpeg;
+        }
+
+        private static int GetEndOfJpeg(byte[] fileBytes, int indexOfMp4, out BoyerMoore bm)
+        {
+            var endOfJpegBytes = MovingPhotoExtraction.ToBytes("FF D9".Split(' '));
+            bm = new BoyerMoore(endOfJpegBytes);
+            var subBytes = fileBytes.Take(indexOfMp4).ToArray();
+            var endOfJpegList = bm.SearchAll(subBytes);
+            return endOfJpegList.LastOrDefault();
         }
 
         private static void WriteVideo(string file, byte[] fileBytes, int indexOfMp4, bool extractJpeg, int? indexOfJpegEnd = null, string outputDirectory = null)
@@ -140,12 +151,19 @@ namespace GoMoPhoConsole
 
             if (extractJpeg)
             {
-                int jpegEndIdx = indexOfJpegEnd ?? GetEndOfJpeg(fileBytes, out BoyerMoore bm);
-                var jpgFile = Path.Combine(outputDirectory, Path.GetFileName(file));
-                using (var jpgStream = new FileStream(jpgFile, FileMode.Create, FileAccess.Write, FileShare.None))
+                int jpegEndIdx = indexOfJpegEnd ?? GetEndOfJpeg(fileBytes, indexOfMp4, out BoyerMoore bm);
+                if (jpegEndIdx > 0)
                 {
-                    jpgStream.Seek(0, SeekOrigin.Begin);
-                    jpgStream.Write(fileBytes, 0, jpegEndIdx+2);
+                    var jpgFile = Path.Combine(outputDirectory, Path.GetFileName(file));
+                    using (var jpgStream = new FileStream(jpgFile, FileMode.Create, FileAccess.Write, FileShare.None))
+                    {
+                        jpgStream.Seek(0, SeekOrigin.Begin);
+                        jpgStream.Write(fileBytes, 0, jpegEndIdx + 2);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Could not find end of jpeg file {file}");
                 }
             }
         }

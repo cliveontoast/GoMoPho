@@ -51,11 +51,11 @@ If you provide a folder that contains google motion photos,
 then I will extract any videos found");
             if (args.Length == 0)
             {
-                Console.WriteLine("Press H to show the help, otherwise press any other key to provide a folder");
+                Console.WriteLine("Press A to show more advanced options, otherwise press any other key to provide a folder");
                 var key = Console.ReadKey();
-                if (key.Key == ConsoleKey.H)
+                if (key.Key == ConsoleKey.A)
                 {
-                    Help("Next time you run the application, you can follow the instructions below");
+                    Help("You may pass command line arguments to the application in the future.");
                 }
             }
             int i = 0;
@@ -113,9 +113,9 @@ Please provide command line arguments as follows:
             2) mp4 file of the motion photo
 
 For example if you type the following arguments when running me:
-    d ""C:\Users\Clive\OneDrive\Documents\Pictures\Camera Roll""
+    d ""C:\Users\Clive\OneDrive\Documents\Pictures\Camera Roll"" s ""Output\"" g p ""*.jpg""
 
-Then I will go through all the motion photos like *MVIMG_*.jpg and create a new .mp4 file for each one found.
+Then I will write to the ""Output\"" folder mp4 videos, jpeg files without the embedded video, and a gif file too.
 
 ");
         }

@@ -19,17 +19,6 @@ The following bash commandline will unzip and apply the execute permission to th
 unzip -d ./GoMoPho GoMoPho.GNULinux.x.x.zip && cd ./GoMoPho && source grant_perms.sh
 ```
 
-#### Compilation
-```
-dotnet build src\GoogleMotionImage.sln
-```
-Windows: Run  Build-Test-Zip.bat file to compile and test the program.
-
-#### Testing in windows
-```
-Build-Test-Zip.bat
-```
-
 #### Running
 When running any of the options below, you can either pass in a directory with your MVIMG files as an argument, or run it with no argument, then type or paste in the location of the directory with your MVIMG files.
 
@@ -86,10 +75,10 @@ On running the application without any arguments you are greeted with the follow
 Welcome to google motion photos extractor.
 If you provide a folder that contains google motion photos,
 then I will extract any videos found
-Press H to show the help, otherwise press any other key to provide a folder
+Press A to show more advanced options, otherwise press any other key to provide a folder
 ```
 
-If you press any other key besides H, you will be asked to provide a folder/directory to process 
+If you press any other key besides A, you will be asked to provide a folder/directory to process 
 
 ```
 Please type in a directory to process motion photos and press ENTER i.e. C:\\Users\\Clive\\OneDrive\\Documents\\Pictures\\Camera Roll
@@ -110,10 +99,10 @@ Press any key to exit
 ```
 
 
-If you press H you will see the instructions on how to provide arguments 
+If you press A you will see the instructions on how to provide arguments 
 
 ```
-Next time you run the application, you can follow the instructions below
+You may pass command line arguments to the application in the future.
 
 Please provide command line arguments as follows:
 
@@ -132,9 +121,9 @@ Please provide command line arguments as follows:
             2) mp4 file of the motion photo
 
 For example if you type the following arguments when running me:
-    d "C:\Users\Clive\OneDrive\Documents\Pictures\Camera Roll"
+    d "C:\Users\Clive\OneDrive\Documents\Pictures\Camera Roll" s "Output\" g p "*.jpg"
 
-Then I will go through all the motion photos like *MVIMG_*.jpg and create a new .mp4 file for each one found.
+Then I will write to the "Output\" folder mp4 videos, jpeg files without the embedded video, and a gif file too.
 
 
 Please type in a directory to process motion photos and press ENTER i.e. C:\\Users\\Clive\\OneDrive\\Documents\\Pictures\\Camera Roll
@@ -169,4 +158,15 @@ Writing to c:\temp\Processed\MVIMG_20180910_124410.gif
 Finished converion file [MVIMG_20180910_124410.mp4] to .gif
 Press any key to exit
 
+```
+
+#### Compilation
+```
+dotnet build src\GoogleMotionImage.sln
+```
+Windows: Run  Build-Test-Zip.bat file to compile and test the program.
+
+#### Testing in windows
+```
+Build-Test-Zip.bat
 ```
