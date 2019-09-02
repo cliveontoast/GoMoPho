@@ -1,5 +1,4 @@
 ﻿using GoMoPho;
-using GoMoPhoCoreConsole;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

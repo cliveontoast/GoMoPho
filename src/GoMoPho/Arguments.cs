@@ -97,7 +97,7 @@ then I will extract any videos found");
         private static void Help(string preamble)
         {
             Console.WriteLine(@"
-" + preamble + @"
+" + preamble + $@"
 
 Please provide command line arguments as follows:
 
@@ -108,7 +108,8 @@ Please provide command line arguments as follows:
         A search pattern other than *MVIMG_*.jpg in which to find google motion photos
 
     g 
-        Extract a encoded gif file along with the mp4 video file
+        Extract a encoded gif file along with the mp4 video file.
+        This may download approximately 130MB and store it here: {FFmpegGif.TempLocation}
 
     s <output directory>
         A separate directory that will create two files per motion photo

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xabe.FFmpeg;
 
-namespace GoMoPhoCoreConsole
+namespace GoMoPho
 {
     public class FFmpegGif
     {
@@ -25,6 +25,11 @@ namespace GoMoPhoCoreConsole
 
         private static async Task RunConversion(ConcurrentQueue<FileInfo> filesToConvert)
         {
+            if (FFmpeg.ExecutablesPath == null && !await GetFFmpeg())
+            {
+                await Console.Out.WriteLineAsync("Could not get FFmpeg, sorry");
+                return;
+            }
             string outputFileName = null;
             while (filesToConvert.TryDequeue(out FileInfo fileToConvert))
             {
@@ -34,26 +39,42 @@ namespace GoMoPhoCoreConsole
                 }
                 catch (Exception e)
                 {
-                    if (FFmpeg.ExecutablesPath == null)
-                    {
-                        FFmpeg.ExecutablesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FFmpeg");
-                        //Get latest version of FFmpeg. It's great idea if you don't know if you had installed FFmpeg.
-                        await Console.Out.WriteLineAsync($"Getting FFMpeg, storing {FFmpeg.ExecutablesPath}");
-                        await FFmpeg.GetLatestVersion();
-                        filesToConvert.Enqueue(fileToConvert);
-                    }
-                    else
-                    {
-                        await Console.Out.WriteLineAsync($"Failed file {fileToConvert.Name} to {outputFileName}");
-                        while (e != null)
-                        {
-                            await Console.Out.WriteLineAsync(e.Message);
-                            await Console.Out.WriteLineAsync(e.StackTrace);
-                            e = e.InnerException;
-                        }
-                    }
+                    await Console.Out.WriteLineAsync($"Failed file {fileToConvert.Name} to {outputFileName}");
+                    await PrintException(e);
                 }
             }
+        }
+
+        private static async Task<bool> GetFFmpeg()
+        {
+            try
+            {
+                FFmpeg.ExecutablesPath = TempLocation;
+                //Get latest version of FFmpeg. It's great idea if you don't know if you had installed FFmpeg.
+                await Console.Out.WriteLineAsync($"Getting FFMpeg, storing {FFmpeg.ExecutablesPath}");
+                await FFmpeg.GetLatestVersion();
+            }
+            catch (Exception e)
+            {
+                await Console.Out.WriteLineAsync($"Could not get FFMpeg");
+                await PrintException(e);
+                return false;
+            }
+            return true;
+        }
+
+        public static string TempLocation => Path.Combine(Path.GetTempPath(), "FFmpeg");
+
+        private static async Task<Exception> PrintException(Exception e)
+        {
+            while (e != null)
+            {
+                await Console.Out.WriteLineAsync(e.Message);
+                await Console.Out.WriteLineAsync(e.StackTrace);
+                e = e.InnerException;
+            }
+
+            return e;
         }
 
         private static async Task<string> OutputGif(FileInfo fileToConvert)
