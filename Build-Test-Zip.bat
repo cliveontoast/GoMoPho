@@ -1,6 +1,7 @@
 dotnet clean src\GoogleMotionImage.sln
 del /Q /S /F .\bin
-dotnet build src\GoogleMotionImage.sln
+dotnet build src\GoMoPhoFrameworkConsole\GoMoPhoFrameworkConsole.csproj
+dotnet clean src\GoogleMotionImage.sln
 dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -o ..\..\bin\CrossPlatform
 dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r win-x64 -o ..\..\bin\WindowsCore
 dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r linux-x64 -o ..\..\bin\GNULinux
