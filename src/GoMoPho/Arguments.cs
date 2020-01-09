@@ -18,6 +18,8 @@ namespace GoMoPho
 
         public string OutputDirectory => string.IsNullOrWhiteSpace(SplitDirectory) ? null : SplitDirectory;
         
+        public bool Headless { get; private set; }
+
         public Arguments(string[] args, Func<(string directory, bool success)> directoryPicker)
         {
             ProcessArgs(args);
@@ -85,6 +87,12 @@ then I will extract any videos found");
                     case "split":
                         SplitDirectory = args[i++];
                         break;
+
+                    case "h":
+                    case "headless":
+                        Headless = true;
+                        break;
+
                     default:
                         Help(@"You have not supplied valid arguments in the command line
 
@@ -115,6 +123,9 @@ Please provide command line arguments as follows:
         A separate directory that will create two files per motion photo
             1) jpg file without the embedded motion photo
             2) mp4 file of the motion photo
+   
+    h
+        Headless / no-prompt mode.
 
 For example if you type the following arguments when running me:
     d ""C:\Users\Clive\OneDrive\Documents\Pictures\Camera Roll"" s ""Output\"" g p ""*.jpg""

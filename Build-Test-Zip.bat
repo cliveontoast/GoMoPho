@@ -1,5 +1,8 @@
 dotnet clean src\GoogleMotionImage.sln
 del /Q /S /F .\bin
+del /Q /S /F .\test-image\*.mp4
+del /Q /S /F .\test-image\*.gif
+del /Q /S /F .\split
 dotnet build src\GoMoPhoFrameworkConsole\GoMoPhoFrameworkConsole.csproj
 dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -o ..\..\bin\CrossPlatform
 dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r win-x64 -o ..\..\bin\WindowsCore
@@ -7,9 +10,10 @@ dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r linux-x64 -o ..\.
 dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r ubuntu-x64 -o ..\..\bin\Ubuntu
 dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r osx-x64 -o ..\..\bin\macOS
 
-dotnet bin\CrossPlatform\GoMoPhoCoreConsole.dll d test-image\ g
+dotnet bin\CrossPlatform\GoMoPhoCoreConsole.dll d test-image\ g h
 rem windows only
-bin\Windows\GoMoPhoConsole.exe d test-image\ g s split 
+bin\Windows\GoMoPhoConsole.exe d test-image\ g s split h
+bin\\netcoreapp2.0\win-x64\GoMoPhoCoreConsole.exe d test-image\ g s split h
 test-image\MVIMG_20180910_124410.mp4
 test-image\MVIMG_20180910_124410.gif
 split\MVIMG_20180910_124410.mp4

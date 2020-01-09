@@ -70,8 +70,11 @@ namespace GoMoPhoConsole
             {
                 FFmpegGif.CreateGifs(filesToConvert);
             }
-            Console.WriteLine("Press any key to exit");
-            Console.ReadKey();
+            if (!options.Headless)
+            {
+                Console.WriteLine("Press any key to exit");
+                Console.ReadKey();
+            }
         }
 
         public static bool Read(string file, List<byte[]> byteSearch, string outputDirectory, bool extractJpg)
