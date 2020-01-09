@@ -6,7 +6,7 @@ History: Android backups to Google Drive did not upload the video. Read  https:/
 Google Drive should now support backing up the video portion. https://www.guidingtech.com/share-motion-photos-google/
 
 #### Running the zip release
-Choose the zip file for your computer and unzip it to a new location. *Native* is compiled for the operating system, while *CrossPlatform* runs on all platforms via the dotnet runtime https://www.microsoft.com/net/download
+Visit https://github.com/cliveontoast/GoMoPho/releases and choose the zip file for your computer and unzip it to a new location. *Native* is compiled for the operating system, while *CrossPlatform* runs on all platforms via the dotnet runtime https://www.microsoft.com/net/download
 - Windows (native) - GoMoPho.WindowsFramework
 - GNU/Linux (native) - GoMoPho.GNULinux
 - macOS (native) - GoMoPho.macOS
