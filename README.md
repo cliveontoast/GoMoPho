@@ -181,6 +181,8 @@ https://support.google.com/photos/thread/160779?pli=1&authuser=1 (alright this o
 
 https://android.jlelse.eu/working-with-motion-photos-da0aa49b50c for doing a much better job
 
+https://aur.archlinux.org/packages/gomopho/
+
 ### The future
 Bringing in a exif tool for C# and using teh micro_video_offset tag like this simple ruby script, and simplifying all my c#  to fewer lines https://gist.github.com/asm/3b43e6de9c4ce99aea9f3e18b0efed57 
 
