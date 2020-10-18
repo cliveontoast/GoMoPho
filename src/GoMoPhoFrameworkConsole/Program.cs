@@ -2,8 +2,12 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace GoMoPhoConsole
 {
@@ -20,10 +24,15 @@ namespace GoMoPhoConsole
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
-                Console.WriteLine();
-                Console.WriteLine(e.Message);
-
+                var ex = e;
+                do
+                {
+                    Console.WriteLine(ex.StackTrace);
+                    Console.WriteLine();
+                    Console.WriteLine(ex.Message);
+                    ex = ex.InnerException;
+                }
+                while (ex != null);
                 Console.WriteLine("Report to https://github.com/cliveontoast/GoMoPho/issues");
             }
         }
@@ -166,6 +175,7 @@ namespace GoMoPhoConsole
                 mp4Stream.Seek(0, SeekOrigin.Begin);
                 mp4Stream.Write(fileBytes, indexOfMp4, fileBytes.Length - indexOfMp4);
             }
+            var createdOn = GetImageTime.ReplaceDateTakenFromImage(file, mp4File);
             filesToConvert.Enqueue(new FileInfo(mp4File));
 
             if (extractJpeg)
@@ -179,6 +189,7 @@ namespace GoMoPhoConsole
                         jpgStream.Seek(0, SeekOrigin.Begin);
                         jpgStream.Write(fileBytes, 0, jpegEndIdx + 2);
                     }
+                    GetImageTime.SetDateTime(jpgFile, createdOn);
                 }
                 else
                 {
@@ -199,6 +210,47 @@ namespace GoMoPhoConsole
             else
             {
                 return (null, false);
+            }
+        }
+    }
+
+    public static class GetImageTime
+    {
+        private static Regex r = new Regex(":");
+        public static PropertyItem ReplaceDateTakenFromImage(string path, string copyToPath)
+        {
+            try
+            {
+                using FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+                using Image myImage = Image.FromStream(fs, false, false);
+
+                var propItem = myImage.GetPropertyItem(36867);
+                SetDateTime(copyToPath, propItem);
+                return propItem;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Did not correct file date of {path} {e.Message}");
+            }
+            return null;
+        }
+
+        public static void SetDateTime(string copyToPath, PropertyItem propItem)
+        {
+            if (propItem == null) return;
+
+            try
+            {
+                string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
+                var date = DateTime.Parse(dateTaken);
+
+                File.SetCreationTime(copyToPath, date);
+                File.SetLastAccessTime(copyToPath, date);
+                File.SetLastWriteTime(copyToPath, date);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Did not correct file date of {copyToPath} {e.Message}");
             }
         }
     }
