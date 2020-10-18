@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
+    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
     <PackageReference Include="Xabe.FFmpeg" Version="3.4.0" />
   </ItemGroup>
 

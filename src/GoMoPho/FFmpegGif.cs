@@ -85,6 +85,16 @@ namespace GoMoPho
             await Console.Out.WriteLineAsync($"Writing to {outputFileName}");
             await Conversion.ToGif(fileToConvert.FullName, outputFileName, 0).Start();
             await Console.Out.WriteLineAsync($"Finished converion file [{fileToConvert.Name}] to .gif");
+            try
+            { 
+                File.SetCreationTime(outputFileName, fileToConvert.CreationTime);
+                File.SetLastAccessTime(outputFileName, fileToConvert.LastAccessTime);
+                File.SetLastWriteTime(outputFileName, fileToConvert.LastWriteTime);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Did not correct file date of {outputFileName} {e.Message}");
+            }
             return outputFileName;
         }
     }
