@@ -40,8 +40,9 @@ namespace GoMoPhoConsole
         { 
             filesToConvert = new ConcurrentQueue<FileInfo>();
 
-            string searchPattern = System.Configuration.ConfigurationManager.AppSettings["FilePattern"];
-            var hexSearches = System.Configuration.ConfigurationManager.AppSettings.AllKeys.Where(a => a.StartsWith("Mp4Header")).ToList();
+            var searchPatterns = System.Configuration.ConfigurationManager.AppSettings.AllKeys.Where(a => a.StartsWith("FilePattern")).ToArray();
+            searchPatterns = searchPatterns.Select(a => System.Configuration.ConfigurationManager.AppSettings[a]).ToArray();
+            var hexSearches = System.Configuration.ConfigurationManager.AppSettings.AllKeys.Where(a => a.StartsWith("Mp4Header")).ToArray();
             var byteSearches = hexSearches.Select(a => MovingPhotoExtraction.ToBytes(System.Configuration.ConfigurationManager.AppSettings[a].Split(' '))).ToList();
 
             var options = new Arguments(args, DirectoryPicker);
@@ -50,9 +51,9 @@ namespace GoMoPhoConsole
                 Console.WriteLine("Cannot continue with current options. Exiting");
                 return;
             }
-            searchPattern = options.SearchPattern ?? searchPattern;
+            searchPatterns = string.IsNullOrWhiteSpace(options.SearchPattern) ? searchPatterns : new[] { options.SearchPattern };
             var folder = options.Directory;
-            var imageFiles = Directory.GetFiles(folder, searchPattern);
+            var imageFiles = searchPatterns.SelectMany(a => Directory.GetFiles(folder, a)).ToArray();
             Console.WriteLine("Found the following number of google motion photos: " + imageFiles.Length);
 
             int count = 0;
@@ -207,6 +208,12 @@ namespace GoMoPhoConsole
 
     public static class GetImageTime
     {
+        /// <summary>
+        /// Date and time when the image was stored as digital data. If, for example, an image was captured by DSC and at the same time the file was recorded, then DateTimeOriginal and DateTimeDigitized will have the same contents.
+        ///
+        /// The format is YYYY:MM:DD HH:MM:SS with time shown in 24-hour format and the date and time separated by one blank character(0x2000). The character string length is 20 bytes including the NULL terminator.When the field is empty, it is treated as unknown.
+        /// </summary>
+        private const int PropertyTagExifDTOrig = 0x9004;
         private static Regex r = new Regex(":");
         public static PropertyItem ReplaceDateTakenFromImage(string path, string copyToPath)
         {
@@ -215,7 +222,7 @@ namespace GoMoPhoConsole
                 using FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
                 using Image myImage = Image.FromStream(fs, false, false);
 
-                var propItem = myImage.GetPropertyItem(36867);
+                var propItem = myImage.GetPropertyItem(PropertyTagExifDTOrig);
                 SetDateTime(copyToPath, propItem);
                 return propItem;
             }

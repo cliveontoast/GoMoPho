@@ -10,7 +10,7 @@ dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r linux-x64 -o .\bi
 dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r ubuntu-x64 -o .\bin\Ubuntu
 dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r osx-x64 -o .\bin\macOS
 
-dotnet bin\CrossPlatform\GoMoPhoCoreConsole.dll d test-image\ g h
+dotnet bin\CrossPlatform\GoMoPhoCoreConsole.dll d test-image\ g h pattern "MVIMG_20180910_12441*.jpg"
 rem windows only
 bin\Windows\GoMoPhoConsole.exe d test-image\ g s split h
 bin\netcoreapp3.1\win-x64\GoMoPhoCoreConsole.exe d test-image\ g s split h
