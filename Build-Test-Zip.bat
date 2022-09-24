@@ -25,6 +25,9 @@ split\MVIMG_20180910_124410.mp4
 split\MVIMG_20180910_124410.gif
 split\MVIMG_20180910_124410.jpg
 
+git restore src\GoMoPho\packages.lock.json
+git restore src\GoMoPhoFrameworkConsole\packages.lock.json
+
 set /P GoVersion=
 set zipper=c:\Program Files\7-Zip\7z.exe
 if NOT EXIST "%zipper%" SET zipper=c:\Program Files (x86)\7-Zip\7z.exe
