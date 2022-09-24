@@ -70,13 +70,13 @@ then I will extract any videos found");
                 {
                     case "d":
                     case "directory":
-                        if (args.Length > i+1)
+                        if (args.Length > i)
                             Directory = args[i++];
                         break;
 
                     case "p":
                     case "pattern":
-                        if (args.Length > i+1)
+                        if (args.Length > i)
                             SearchPattern = args[i++];
                         break;
 
@@ -87,7 +87,7 @@ then I will extract any videos found");
 
                     case "s":
                     case "split":
-                        if (args.Length > i+1)
+                        if (args.Length > i)
                             SplitDirectory = args[i++];
                         break;
 
