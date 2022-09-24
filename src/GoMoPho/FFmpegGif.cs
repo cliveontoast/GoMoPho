@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xabe.FFmpeg;
+using Xabe.FFmpeg.Downloader;
 
 namespace GoMoPho
 {
@@ -18,7 +19,7 @@ namespace GoMoPho
 
         public static async Task Run(ConcurrentQueue<FileInfo> filesToConvert)
         {
-            await Console.Out.WriteLineAsync($"Find {filesToConvert.Count} files to convert to gif");
+            await Console.Out.WriteLineAsync($"Found {filesToConvert.Count} files to convert to gif");
             //Run conversion
             await RunConversion(filesToConvert);
         }
@@ -39,7 +40,7 @@ namespace GoMoPho
                 }
                 catch (Exception e)
                 {
-                    await Console.Out.WriteLineAsync($"Failed file {fileToConvert.Name} to {outputFileName}");
+                    await Console.Out.WriteLineAsync($"Failed to create GIF of {fileToConvert.Name}");
                     await PrintException(e);
                 }
             }
@@ -49,10 +50,9 @@ namespace GoMoPho
         {
             try
             {
-                FFmpeg.ExecutablesPath = TempLocation;
                 //Get latest version of FFmpeg. It's great idea if you don't know if you had installed FFmpeg.
-                await Console.Out.WriteLineAsync($"Getting FFMpeg, storing {FFmpeg.ExecutablesPath}");
-                await FFmpeg.GetLatestVersion();
+                await Console.Out.WriteLineAsync($"Getting FFMpeg, saving to {TempLocation}");
+                await FFmpegDownloader.GetLatestVersion(FFmpegVersion.Official, TempLocation);
             }
             catch (Exception e)
             {
@@ -81,10 +81,18 @@ namespace GoMoPho
         {
             //Save file to the same location with changed extension
             string outputFileName = Path.ChangeExtension(fileToConvert.FullName, ".gif");
-            File.Delete(outputFileName);
             await Console.Out.WriteLineAsync($"Writing to {outputFileName}");
-            await Conversion.ToGif(fileToConvert.FullName, outputFileName, 0).Start();
-            await Console.Out.WriteLineAsync($"Finished converion file [{fileToConvert.Name}] to .gif");
+            var input = await FFmpeg.GetMediaInfo(fileToConvert.FullName);
+            // We only want to copy 1 of the video streams to the gif
+            // It seems Google includes multiple streams in some gifs with key frames
+            // (the photos it thinks you might want to pick)
+            var videoStream = input.VideoStreams.First();
+            var conversion = FFmpeg.Conversions.New()
+                .AddStream(videoStream)
+                .SetOutput(outputFileName)
+                .SetOverwriteOutput(true);
+            await conversion.Start();
+            await Console.Out.WriteLineAsync($"Finished conversion for file [{fileToConvert.Name}] to .gif");
             try
             { 
                 File.SetCreationTime(outputFileName, fileToConvert.CreationTime);
