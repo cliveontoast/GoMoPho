@@ -53,6 +53,7 @@ namespace GoMoPho
                 //Get latest version of FFmpeg. It's great idea if you don't know if you had installed FFmpeg.
                 await Console.Out.WriteLineAsync($"Getting FFMpeg, saving to {TempLocation}");
                 await FFmpegDownloader.GetLatestVersion(FFmpegVersion.Official, TempLocation);
+                FFmpeg.SetExecutablesPath(TempLocation);
             }
             catch (Exception e)
             {
