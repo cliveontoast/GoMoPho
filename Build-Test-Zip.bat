@@ -19,11 +19,15 @@ dotnet bin\CrossPlatform\GoMoPhoCoreConsole.dll d test-image\ g h pattern "MVIMG
 rem windows only
 bin\Windows\GoMoPhoConsole.exe d test-image\ g s split h
 bin\netcoreapp3.1\win-x64\GoMoPhoCoreConsole.exe d test-image\ g s split h
+bin\netcoreapp3.1\win-x64\GoMoPhoCoreConsole.exe d test-image\ g s split2
 test-image\MVIMG_20180910_124410.mp4
 test-image\MVIMG_20180910_124410.gif
 split\MVIMG_20180910_124410.mp4
 split\MVIMG_20180910_124410.gif
 split\MVIMG_20180910_124410.jpg
+split2\MVIMG_20180910_124410.mp4
+split2\MVIMG_20180910_124410.gif
+split2\MVIMG_20180910_124410.jpg
 
 git restore src\GoMoPho\packages.lock.json
 git restore src\GoMoPhoFrameworkConsole\packages.lock.json
