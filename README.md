@@ -166,6 +166,17 @@ dotnet build src\GoogleMotionImage.sln
 ```
 Windows: Run  Build-Test-Zip.bat file to compile and test the program.
 
+## Nuget rebuild lock files
+http://blog.ctaggart.com/2019/03/using-nuget-lock-file-for-reproducible.html
+```
+dotnet nuget locals all --clear
+git clean -xfd
+git rm **/packages.lock.json -f
+dotnet restore GoogleMotionImage.sln
+or
+dotnet restore GoogleMotionImage.sln --force-evaluate
+```
+
 #### Testing in windows
 ```
 Build-Test-Zip.bat

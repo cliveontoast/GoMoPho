@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "dependencies": {
+    ".NETFramework,Version=v4.6.2": {
+      "Newtonsoft.Json": {
+        "type": "Direct",
+        "requested": "[13.0.1, 13.0.1]",
+        "resolved": "13.0.1",
+        "contentHash": "ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A=="
+      },
+      "Xabe.FFmpeg": {
+        "type": "Direct",
+        "requested": "[5.2.0, 5.2.0]",
+        "resolved": "5.2.0",
+        "contentHash": "y2fjj959KReVEYsr6ya0Ci7NiH1GTVMEE4w5wpaE1ATbxnpOpWFrtOtpH6gMlqMEdFaevg2tJJTSFLk+Vf6Eeg=="
+      },
+      "Xabe.FFmpeg.Downloader": {
+        "type": "Direct",
+        "requested": "[5.2.0, 5.2.0]",
+        "resolved": "5.2.0",
+        "contentHash": "glwfRQjN2h8tna5zfQVN2SYBx0rNUTmuTtvcY/NHZuIi+MK5atdXAwAQ8HvrqdN4DIqPNTf/b8wmXaz8/0Ctsg=="
+      }
+    }
+  }
+}

@@ -4,11 +4,16 @@ del /Q /S /F .\test-image\*.mp4
 del /Q /S /F .\test-image\*.gif
 del /Q /S /F .\split
 dotnet build src\GoMoPhoFrameworkConsole\GoMoPhoFrameworkConsole.csproj
-dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -o .\bin\CrossPlatform
-dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r win-x64 -o .\bin\WindowsCore
-dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r linux-x64 -o .\bin\GNULinux
-dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r ubuntu-x64 -o .\bin\Ubuntu
-dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj -r osx-x64 -o .\bin\macOS
+del /S packages.lock.json
+dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj --output .\bin\CrossPlatform
+del /S packages.lock.json
+dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj --runtime win-x64 --output .\bin\WindowsCore
+del /S packages.lock.json
+dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj --runtime linux-x64 --output .\bin\GNULinux
+del /S packages.lock.json
+dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj --runtime ubuntu-x64 --output .\bin\Ubuntu
+del /S packages.lock.json
+dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj --runtime osx-x64 --output .\bin\macOS
 
 dotnet bin\CrossPlatform\GoMoPhoCoreConsole.dll d test-image\ g h pattern "MVIMG_20180910_12441*.jpg"
 rem windows only
