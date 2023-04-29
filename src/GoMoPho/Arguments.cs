@@ -17,8 +17,10 @@ namespace GoMoPho
         public bool ExtractJpg { get; set; }
 
         public string OutputDirectory => string.IsNullOrWhiteSpace(SplitDirectory) ? null : SplitDirectory;
-        
+
         public bool Headless { get; private set; }
+
+        public bool AutoCreateOutputDir { get; private set; }
 
         public Arguments(string[] args, Func<(string directory, bool success)> directoryPicker)
         {
@@ -34,13 +36,20 @@ namespace GoMoPho
             }
             while (!string.IsNullOrWhiteSpace(SplitDirectory) && !System.IO.Directory.Exists(SplitDirectory))
             {
-                Console.WriteLine(@"Split directory not found. Shall it be created (y/n)? ");
-                var key = Console.ReadKey();
-                Console.WriteLine();
-                IsValid = IsValid && key.Key == ConsoleKey.Y;
-                if (IsValid)
+                if (AutoCreateOutputDir || Headless)
                 {
+                    Console.WriteLine(@"Split directory not found. Creating split directory automatically.");
                     System.IO.Directory.CreateDirectory(OutputDirectory);
+                }
+                else
+                {
+                    Console.WriteLine(@"Split directory not found. Shall it be created (y/n)? ");
+                    var key = Console.ReadKey();
+                    Console.WriteLine();
+                    if (IsValid && key.Key == ConsoleKey.Y)
+                    {
+                        System.IO.Directory.CreateDirectory(OutputDirectory);
+                    }
                 }
             }
             if (System.IO.Directory.Exists(SplitDirectory))
@@ -96,6 +105,11 @@ then I will extract any videos found");
                         Headless = true;
                         break;
 
+                    case "a":
+                    case "AutoCreateOutputDir":
+                        AutoCreateOutputDir = true;
+                        break;
+
                     default:
                         Help(@"You have not supplied valid arguments in the command line
 
@@ -129,6 +143,10 @@ Please provide command line arguments as follows:
    
     h
         Headless / no-prompt mode.
+
+    a
+        Create ouput directory automatically if it does not exists
+
 
 For example if you type the following arguments when running me:
     d ""C:\Users\Clive\OneDrive\Documents\Pictures\Camera Roll"" s ""Output\"" g p ""*.jpg""
