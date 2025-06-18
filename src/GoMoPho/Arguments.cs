@@ -171,6 +171,10 @@ Please provide command line arguments as follows:
     a
         Create ouput directory automatically if it does not exists
 
+    f <Folder / Directory / ffmpeg file>
+        A directory that holds ffmpeg file, or ffmpeg.exe file
+        Or the path to the ffmpeg executable file itself
+
 
 For example if you type the following arguments when running me:
     d ""C:\Users\Clive\OneDrive\Documents\Pictures\Camera Roll"" s ""Output\"" g p ""*.jpg""

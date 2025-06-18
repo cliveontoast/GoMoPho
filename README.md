@@ -102,28 +102,38 @@ Press any key to exit
 If you press A you will see the instructions on how to provide arguments 
 
 ```
-You may pass command line arguments to the application in the future.
-
 Please provide command line arguments as follows:
 
-    d <Directory>
+    d <Folder / Directory>
         A directory to search for google motion photos
 
     p <search pattern>
         A search pattern other than *MVIMG_*.jpg in which to find google motion photos
 
-    g
-        Extract a encoded gif file along with the mp4 video file
+    g 
+        Extract a encoded gif file along with the mp4 video file.
+        This may download approximately 130MB and store it here: {FFmpegGif.TempLocation}
 
     s <output directory>
         A separate directory that will create two files per motion photo
             1) jpg file without the embedded motion photo
             2) mp4 file of the motion photo
+   
+    h
+        Headless / no-prompt mode.
+
+    a
+        Create ouput directory automatically if it does not exists
+
+    f <Folder / Directory / ffmpeg file>
+        A directory that holds ffmpeg file, or ffmpeg.exe file
+        Or the path to the ffmpeg executable file itself
+
 
 For example if you type the following arguments when running me:
-    d "C:\Users\Clive\OneDrive\Documents\Pictures\Camera Roll" s "Output\" g p "*.jpg"
+    d ""C:\Users\Clive\OneDrive\Documents\Pictures\Camera Roll"" s ""Output\"" g p ""*.jpg""
 
-Then I will write to the "Output\" folder mp4 videos, jpeg files without the embedded video, and a gif file too.
+Then I will write to the ""Output\"" folder mp4 videos, jpeg files without the embedded video, and a gif file too.
 
 
 Please type in a directory to process motion photos and press ENTER i.e. C:\\Users\\Clive\\OneDrive\\Documents\\Pictures\\Camera Roll

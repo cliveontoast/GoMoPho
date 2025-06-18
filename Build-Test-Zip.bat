@@ -3,6 +3,7 @@ del /Q /S /F .\bin
 del /Q /S /F .\test-image\*.mp4
 del /Q /S /F .\test-image\*.gif
 del /Q /S /F .\split
+del /S packages.lock.json
 dotnet build src\GoMoPhoFrameworkConsole\GoMoPhoFrameworkConsole.csproj
 del /S packages.lock.json
 dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj --output .\bin\CrossPlatform
