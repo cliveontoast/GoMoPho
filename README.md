@@ -131,9 +131,9 @@ Please provide command line arguments as follows:
 
 
 For example if you type the following arguments when running me:
-    d ""C:\Users\Clive\OneDrive\Documents\Pictures\Camera Roll"" s ""Output\"" g p ""*.jpg""
+    d "C:\Users\Clive\OneDrive\Documents\Pictures\Camera Roll" s "Output\" g p "*.jpg"
 
-Then I will write to the ""Output\"" folder mp4 videos, jpeg files without the embedded video, and a gif file too.
+Then I will write to the "Output\" folder mp4 videos, jpeg files without the embedded video, and a gif file too.
 
 
 Please type in a directory to process motion photos and press ENTER i.e. C:\\Users\\Clive\\OneDrive\\Documents\\Pictures\\Camera Roll
