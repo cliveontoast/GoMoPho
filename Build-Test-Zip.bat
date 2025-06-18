@@ -3,6 +3,7 @@ del /Q /S /F .\bin
 del /Q /S /F .\test-image\*.mp4
 del /Q /S /F .\test-image\*.gif
 del /Q /S /F .\split
+del /S packages.lock.json
 dotnet build src\GoMoPhoFrameworkConsole\GoMoPhoFrameworkConsole.csproj
 del /S packages.lock.json
 dotnet publish src\GoMoPhoConsole\GoMoPhoCoreConsole.csproj --output .\bin\CrossPlatform
@@ -20,6 +21,8 @@ rem windows only
 bin\Windows\GoMoPhoConsole.exe d test-image\ g s split h
 bin\netcoreapp3.1\win-x64\GoMoPhoCoreConsole.exe d test-image\ g s split h
 bin\netcoreapp3.1\win-x64\GoMoPhoCoreConsole.exe d test-image\ g s split2
+bin\netcoreapp3.1\win-x64\GoMoPhoCoreConsole.exe d test-image\ g s split3 f c:\apps\ffmpeg h
+bin\netcoreapp3.1\win-x64\GoMoPhoCoreConsole.exe d test-image\ g s split4 f c:\apps\ffmpeg\ffmpeg.exe h
 test-image\MVIMG_20180910_124410.mp4
 test-image\MVIMG_20180910_124410.gif
 split\MVIMG_20180910_124410.mp4
@@ -28,6 +31,12 @@ split\MVIMG_20180910_124410.jpg
 split2\MVIMG_20180910_124410.mp4
 split2\MVIMG_20180910_124410.gif
 split2\MVIMG_20180910_124410.jpg
+split3\MVIMG_20180910_124410.mp4
+split3\MVIMG_20180910_124410.gif
+split3\MVIMG_20180910_124410.jpg
+split4\MVIMG_20180910_124410.mp4
+split4\MVIMG_20180910_124410.gif
+split4\MVIMG_20180910_124410.jpg
 
 git restore src\GoMoPho\packages.lock.json
 git restore src\GoMoPhoFrameworkConsole\packages.lock.json

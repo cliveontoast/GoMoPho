@@ -21,6 +21,8 @@ namespace GoMoPho
         public bool Headless { get; private set; }
 
         public bool AutoCreateOutputDir { get; private set; }
+        
+        public string FFmpegSuppliedLocation { get; private set; }
 
         public Arguments(string[] args, Func<(string directory, bool success)> directoryPicker)
         {
@@ -80,34 +82,56 @@ then I will extract any videos found");
                     case "d":
                     case "directory":
                         if (args.Length > i)
+                        {
                             Directory = args[i++];
+                            Console.WriteLine($"Processing directory {Directory}");
+                        }
                         break;
 
                     case "p":
                     case "pattern":
                         if (args.Length > i)
+                        {
                             SearchPattern = args[i++];
+                            Console.WriteLine($"Processing with search pattern {SearchPattern}");
+                        }
                         break;
 
                     case "g":
                     case "gif":
                         GifExport = true;
+                        Console.WriteLine("Exporting motion photos to gif files");
                         break;
 
                     case "s":
                     case "split":
                         if (args.Length > i)
+                        {
                             SplitDirectory = args[i++];
+                            Console.WriteLine($"Exporting the split pictures and videos to {SplitDirectory}");
+                        }
                         break;
 
                     case "h":
                     case "headless":
                         Headless = true;
+                        Console.WriteLine("Running in headless mode");
                         break;
 
                     case "a":
-                    case "AutoCreateOutputDir":
+                    case "autocreateoutputdir":
                         AutoCreateOutputDir = true;
+                        Console.WriteLine("Auto creating output location");
+                        break;
+
+                    case "f":
+                    case "ffmpeg":
+                    case "ffmpeglocation":
+                        if (args.Length > i)
+                        {
+                            FFmpegSuppliedLocation = args[i++];
+                            Console.WriteLine("Auto creating output location");
+                        }
                         break;
 
                     default:
@@ -126,7 +150,7 @@ then I will extract any videos found");
 
 Please provide command line arguments as follows:
 
-    d <Directory>
+    d <Folder / Directory>
         A directory to search for google motion photos
 
     p <search pattern>
@@ -146,6 +170,10 @@ Please provide command line arguments as follows:
 
     a
         Create ouput directory automatically if it does not exists
+
+    f <Folder / Directory / ffmpeg file>
+        A directory that holds ffmpeg file, or ffmpeg.exe file
+        Or the path to the ffmpeg executable file itself
 
 
 For example if you type the following arguments when running me:
