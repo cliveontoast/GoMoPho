@@ -64,15 +64,15 @@ namespace GoMoPho
                 var expectedFile = Path.Combine(dir.FullName, "ffmpeg");
                 if (File.Exists(expectedFile))
                 {
-                    Console.WriteLine($"Set ffmpeg directory path to {FFmpeg.ExecutablesPath} found ffmpeg in it");
                     FFmpeg.SetExecutablesPath(dir.FullName);
+                    Console.WriteLine($"Set ffmpeg directory path to {FFmpeg.ExecutablesPath} found ffmpeg in it");
                     return;
                 }
                 expectedFile = expectedFile + ".exe";
                 if (File.Exists(expectedFile))
                 {
-                    Console.WriteLine($"Set ffmpeg directory path to {FFmpeg.ExecutablesPath} found ffmpeg.exe in it");
                     FFmpeg.SetExecutablesPath(dir.FullName);
+                    Console.WriteLine($"Set ffmpeg directory path to {FFmpeg.ExecutablesPath} found ffmpeg.exe in it");
                     return;
                 }
             }

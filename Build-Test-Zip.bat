@@ -20,8 +20,8 @@ rem windows only
 bin\Windows\GoMoPhoConsole.exe d test-image\ g s split h
 bin\netcoreapp3.1\win-x64\GoMoPhoCoreConsole.exe d test-image\ g s split h
 bin\netcoreapp3.1\win-x64\GoMoPhoCoreConsole.exe d test-image\ g s split2
-bin\netcoreapp3.1\win-x64\GoMoPhoCoreConsole.exe d test-image\ g s split3 f c:\apps\ffmpeg
-bin\netcoreapp3.1\win-x64\GoMoPhoCoreConsole.exe d test-image\ g s split4 f c:\apps\ffmpeg\ffmpeg.exe
+bin\netcoreapp3.1\win-x64\GoMoPhoCoreConsole.exe d test-image\ g s split3 f c:\apps\ffmpeg h
+bin\netcoreapp3.1\win-x64\GoMoPhoCoreConsole.exe d test-image\ g s split4 f c:\apps\ffmpeg\ffmpeg.exe h
 test-image\MVIMG_20180910_124410.mp4
 test-image\MVIMG_20180910_124410.gif
 split\MVIMG_20180910_124410.mp4
