@@ -12,20 +12,21 @@ namespace GoMoPho
 {
     public class FFmpegGif
     {
-        public static void CreateGifs(ConcurrentQueue<FileInfo> filesToConvert)
+        public static void CreateGifs(ConcurrentQueue<FileInfo> filesToConvert, string suppliedFfmpegLocation)
         {
-            Run(filesToConvert).Wait();
+            Run(filesToConvert, suppliedFfmpegLocation).Wait();
         }
 
-        public static async Task Run(ConcurrentQueue<FileInfo> filesToConvert)
+        public static async Task Run(ConcurrentQueue<FileInfo> filesToConvert, string suppliedFfmpegLocation)
         {
             await Console.Out.WriteLineAsync($"Found {filesToConvert.Count} files to convert to gif");
             //Run conversion
-            await RunConversion(filesToConvert);
+            await RunConversion(filesToConvert, suppliedFfmpegLocation);
         }
 
-        private static async Task RunConversion(ConcurrentQueue<FileInfo> filesToConvert)
+        private static async Task RunConversion(ConcurrentQueue<FileInfo> filesToConvert, string suppliedFfmpegLocation)
         {
+            AttemptToUseSuppliedFfmpegLocation(suppliedFfmpegLocation);
             if (FFmpeg.ExecutablesPath == null && !await GetFFmpeg())
             {
                 await Console.Out.WriteLineAsync("Could not get FFmpeg, sorry");
@@ -44,6 +45,38 @@ namespace GoMoPho
                     await PrintException(e);
                 }
             }
+        }
+
+        private static void AttemptToUseSuppliedFfmpegLocation(string suppliedFfmpegLocation)
+        {
+            if (FFmpeg.ExecutablesPath != null) return;
+            if (suppliedFfmpegLocation == null) return;
+            var file = new FileInfo(suppliedFfmpegLocation);
+            if (file.Exists)
+            {
+                FFmpeg.SetExecutablesPath(file.DirectoryName, file.Name);
+                Console.WriteLine($"Set ffmpeg directory path to {FFmpeg.ExecutablesPath}");
+                return;
+            }
+            var dir = new DirectoryInfo(suppliedFfmpegLocation);
+            if (dir.Exists)
+            {
+                var expectedFile = Path.Combine(dir.FullName, "ffmpeg");
+                if (File.Exists(expectedFile))
+                {
+                    Console.WriteLine($"Set ffmpeg directory path to {FFmpeg.ExecutablesPath} found ffmpeg in it");
+                    FFmpeg.SetExecutablesPath(dir.FullName);
+                    return;
+                }
+                expectedFile = expectedFile + ".exe";
+                if (File.Exists(expectedFile))
+                {
+                    Console.WriteLine($"Set ffmpeg directory path to {FFmpeg.ExecutablesPath} found ffmpeg.exe in it");
+                    FFmpeg.SetExecutablesPath(dir.FullName);
+                    return;
+                }
+            }
+            Console.WriteLine($"Could not find ffmpeg from supplied path: {suppliedFfmpegLocation}");
         }
 
         private static async Task<bool> GetFFmpeg()

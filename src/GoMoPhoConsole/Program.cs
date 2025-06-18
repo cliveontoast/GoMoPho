@@ -78,7 +78,7 @@ namespace GoMoPhoConsole
             Console.WriteLine($"Finished. Processed {count} files, found {successCount} videos for {imageFiles.Length} images files.");
             if (options.GifExport)
             {
-                FFmpegGif.CreateGifs(filesToConvert);
+                FFmpegGif.CreateGifs(filesToConvert, options.FFmpegSuppliedLocation);
             }
             if (!options.Headless)
             {
